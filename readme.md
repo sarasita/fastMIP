@@ -17,6 +17,6 @@ Additional content will be added as the fastMIP Phase 2 progress evolves.
 
 ```text
 repo/
-├── [requested_output](requested_output/)   # expected model output
-├── [grid](grid/)                           # common grid definition and remapping
-└── [regions](regions/)                     # regional aggregation utilities
+├── requested_output/   # expected model output
+├── grid/               # common grid definition and remapping
+└── regions/            # regional aggregation utilities
