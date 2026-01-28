@@ -15,7 +15,7 @@ Additional content will be added as the fastMIP Phase 2 progress evolves.
 ## Structure
 **Important:** This structure may change as phase 2 develops.
 
-repo/
-├── requested_output/
-├── grid/
-└── regions/
+```md
+- `requested_output/` — expected model output
+- `grid/` — common grid definition and remapping
+- `regions/` — regional aggregation utilities
