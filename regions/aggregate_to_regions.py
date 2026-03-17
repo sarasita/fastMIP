@@ -2,7 +2,6 @@ import numpy as np
 import xarray as xr
 import regionmask
 
-
 def compute_regional_means(da):
     """
     Compute AR6 regional and global means from gridded data.
