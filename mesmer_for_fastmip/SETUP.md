@@ -31,7 +31,7 @@ matplotlib    # optional only if plotting is wanted
 pip install numpy xarray regionmask statsmodels cftime netCDF4
 ```
 
-or via `mesmer_for_fastmip/requirements.txt` if present in the repo.
+or via `mesmer_for_fastmip/process/requirements.txt` if present in the repo.
 
 (`03_process_regional.py` also imports `matplotlib` for an ad-hoc diagnostic plot
 at the end of the script — add it if you keep that plot, or drop the import if
