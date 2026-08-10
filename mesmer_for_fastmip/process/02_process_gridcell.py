@@ -25,7 +25,8 @@ from mesmer_for_fastmip.fastmip_config import (
     PATH_MESMER_PROCESSED,
     N_REALISATIONS,
     SEED,
-    QUANTILES
+    QUANTILES,
+    TEMPORAL_RESOLUTIONS
     )
 from mesmer_for_fastmip.process.functions import (
     select_realisations,
