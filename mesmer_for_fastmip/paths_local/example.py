@@ -9,8 +9,8 @@ same directory and fill in real paths for your environment.
 `paths_local.py` is gitignored and never committed -- it's the only place
 in this repo that should contain real filesystem paths. Everything else
 (mesmer_config.py, fastmip_config.py, and all processing scripts) imports
-from here rather than hardcoding paths, so this is the single file each
-collaborator needs to edit to run the pipeline locally.
+from here rather than hardcoding paths; this is the single file you need
+to edit to run the pipeline locally.
 """
 
 from pathlib import Path
