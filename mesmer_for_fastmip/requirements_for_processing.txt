@@ -1,0 +1,8 @@
+
+numpy
+xarray
+regionmask
+statsmodels
+cftime
+netCDF4
+matplotlib #optional

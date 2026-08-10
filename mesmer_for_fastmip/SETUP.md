@@ -2,7 +2,40 @@
 
 ### 1. Install dependencies
 
-(however you're already documenting this elsewhere — conda env / requirements.txt / etc.)
+This pipeline uses two separate environments, since generating emulations and
+post-processing them have different requirements.
+
+**a) Emulation environment (generating raw MESMER output)**
+
+Needed to run `mesmer_for_fastmip.emulation` and produce
+`tas_emulations_<ESM>_<SCENARIO>.nc` files. Follow the install instructions in the
+[MESMER repository](https://github.com/MESMER-group/mesmer) to set this up — it
+installs the `mesmer` package itself plus its dependencies.
+
+**b) Post-processing environment (`process/01`–`03`)**
+
+Needed to run the scripts in `process/`. Does not require the `mesmer` package
+itself — only:
+
+```
+numpy
+xarray
+regionmask
+statsmodels
+cftime
+netCDF4       # or h5netcdf — xarray's netCDF backend
+matplotlib    # optional only if plotting is wanted
+```
+
+```bash
+pip install numpy xarray regionmask statsmodels cftime netCDF4
+```
+
+or via `mesmer_for_fastmip/requirements.txt` if present in the repo.
+
+(`03_process_regional.py` also imports `matplotlib` for an ad-hoc diagnostic plot
+at the end of the script — add it if you keep that plot, or drop the import if
+you remove it before running headless/batch.)
 
 ### 2. Configure local paths
 
