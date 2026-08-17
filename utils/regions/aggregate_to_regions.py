@@ -16,7 +16,15 @@ def compute_regional_means(obj, var=None):
             auxiliary coordinates on it), or
           - unstacked, with separate "lat" and "lon" dimensions -- these
             are stacked into "gridcell" internally before aggregating.
+        Input data on a regular latitude-longitude grid, with coordinates
+        "lat" and "lon". Accepts either layout:
+          - already stacked, with a "gridcell" dimension (lat/lon as
+            auxiliary coordinates on it), or
+          - unstacked, with separate "lat" and "lon" dimensions -- these
+            are stacked into "gridcell" internally before aggregating.
 
+        If a Dataset is passed, the variable to apply the aggregation on
+        must be specified, i.e. var != None
         If a Dataset is passed, the variable to apply the aggregation on
         must be specified, i.e. var != None
 
