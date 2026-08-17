@@ -53,6 +53,18 @@ def compute_regional_means(obj, var=None):
         )
 
     # --------------------------------------------------------------
+    # Longitude convention -- regionmask's AR6 land regions are defined on
+    # -180/180. Normalize defensively here (idempotent if already -180/180)
+    # rather than assuming the caller already did this -- a 0-360 input
+    # (e.g. raw cmip6-ng) would otherwise cause ar6.mask() to silently
+    # misassign/drop regions for roughly half the grid. Done before any
+    # stacking below, while "lon" is still guaranteed to be a plain
+    # coordinate rather than a MultiIndex level.
+    # --------------------------------------------------------------
+    da = da.assign_coords(lon=((da["lon"] + 180) % 360) - 180)
+    da = da.sortby("lon")
+
+    # --------------------------------------------------------------
     # Normalize to a "gridcell" dim, whichever layout was passed in.
     # Must happen before `lat` is pulled out below, so it lines up
     # 1:1 with the (now 1-D) gridcell points either way.
@@ -85,12 +97,21 @@ def compute_regional_means(obj, var=None):
     # --------------------------------------------------------------
     # Regional means
     # --------------------------------------------------------------
-    da_ar6 = (
-        (da * weights)
-        .groupby(ar6_mask)
-        .sum("gridcell")
-        / weights.groupby(ar6_mask).sum("gridcell")
-    )
+    # NOTE: previously computed as (da * weights).groupby(...).sum("gridcell")
+    # / weights.groupby(...).sum("gridcell"). That silently breaks whenever
+    # one group (e.g. one ESM's gridcells within one AR6 region) is entirely
+    # NaN: .sum(skipna=True) on an all-NaN group returns 0.0 (not NaN), while
+    # the weight-sum denominator is unaffected by da's missingness (it's
+    # purely mask * cos(lat)) and stays a genuine positive number -- so the
+    # result is a hard, clean-looking 0.0 sitting undetected among real
+    # values, rather than a propagated NaN. da.weighted(weights).mean(...) is
+    # correctly skipna-aware (as already relied on for the global mean
+    # below): it normalizes only by the weights of the *valid* cells, so an
+    # all-NaN group correctly returns NaN instead.
+    def _weighted_group_mean(da_group):
+        return da_group.weighted(weights).mean("gridcell", skipna=True)
+
+    da_ar6 = da.groupby(ar6_mask).map(_weighted_group_mean)
 
     # --------------------------------------------------------------
     # Global mean
