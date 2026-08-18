@@ -2,3 +2,7 @@ generate_sample_data/
 mesmer/
 fair/
 .DS_Store
+archive/
+mesmer_for_fastmip/paths_local.py
+cmip6_for_fastmip/paths_local.py
+fair_for_fastmip/output
