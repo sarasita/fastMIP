@@ -117,7 +117,10 @@ def quantiles_across_esm(
     tiers=None,
 ):
     """
-    Quantiles (and mean) across ESMs of the per-ESM member mean.
+    Quantiles (and mean) across the pooled (esm, member) ensemble -- every
+    individual member from every ESM is treated as one sample in a single
+    flattened distribution, rather than first collapsing each ESM to its
+    own member-mean and taking quantiles of those per-ESM means.
 
     Parameters
     ----------
@@ -129,13 +132,13 @@ def quantiles_across_esm(
         quantiles are computed across all available ESMs.
     """
 
-    print("Compute quantiles across ESM")
+    print("Compute quantiles across ESM (pooled esm x member)")
 
-    da = ds[variable].mean(dim="member")
+    da = ds[variable]
 
     if tiers is None:
-        q = da.quantile(quantiles, dim="esm")
-        m = da.mean(dim="esm")
+        q = da.quantile(quantiles, dim=["esm", "member"])
+        m = da.mean(dim=["esm", "member"])
         return xr.Dataset(
             {
                 variable: q,
@@ -150,8 +153,8 @@ def quantiles_across_esm(
 
         da_tier = da.sel(esm=models)
 
-        q = da_tier.quantile(quantiles, dim="esm")
-        m = da_tier.mean(dim="esm")
+        q = da_tier.quantile(quantiles, dim=["esm", "member"])
+        m = da_tier.mean(dim=["esm", "member"])
 
         q = q.expand_dims(tier=[tier_name])
         m = m.expand_dims(tier=[tier_name])
