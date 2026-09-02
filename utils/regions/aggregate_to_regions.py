@@ -117,10 +117,10 @@ def compute_regional_means(obj, var=None):
     # below): it normalizes only by the weights of the *valid* cells, so an
     # all-NaN group correctly returns NaN instead.
     def _weighted_group_mean(da_group):
-        return da_group.weighted(weights).mean("gridcell", skipna=True)
+        w = np.cos(np.deg2rad(da_group["lat"]))
+        return da_group.weighted(w).mean("gridcell", skipna=True)
 
     da_ar6 = da.groupby(ar6_mask).map(_weighted_group_mean)
-
     # --------------------------------------------------------------
     # Global mean
     # --------------------------------------------------------------

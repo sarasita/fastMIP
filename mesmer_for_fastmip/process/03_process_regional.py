@@ -73,39 +73,39 @@ if __name__ == "__main__":
             #    everything below operates on the much smaller regional dataset.
             ds_regional = compute_regional_means(ds, var="tas")
 
-            # 3. Outputs 4 & 5 -- quantiles by / across ESM
-            quantiles_by_esm(ds_regional, "tas", QUANTILES).to_netcdf(
-                scen_dir / f"tas_{scenario}_{EMULATOR_NAME}_{aggregation}_quantiles-by-ESM.nc"
-            )
+            # # 3. Outputs 4 & 5 -- quantiles by / across ESM
+            # quantiles_by_esm(ds_regional, "tas", QUANTILES).to_netcdf(
+            #     scen_dir / f"tas_{scenario}_{EMULATOR_NAME}_{aggregation}_quantiles-by-ESM.nc"
+            # )
             quantiles_across_esm(ds_regional, "tas", QUANTILES, tiers=tiers).to_netcdf(
                 scen_dir / f"tas_{scenario}_{EMULATOR_NAME}_{aggregation}_quantiles-across-ESM.nc"
             )
 
-            # 4. Forced response / residual, estimated directly on the regional means.
-            #    For monthly data, fit independently per calendar month (the
-            #    seasonal cycle is still intact -- see functions.py docstring).
-            ds_processed = estimate_forced_response(
-                ds_regional, variable="tas", method="polyfit", group_by_month=group_by_month
-            )
+        #     # 4. Forced response / residual, estimated directly on the regional means.
+        #     #    For monthly data, fit independently per calendar month (the
+        #     #    seasonal cycle is still intact -- see functions.py docstring).
+        #     ds_processed = estimate_forced_response(
+        #         ds_regional, variable="tas", method="polyfit", group_by_month=group_by_month
+        #     )
 
-            # 5. Per-scenario uncertainty decomposition (output 6b)
-            unc = uncertainty_decomposition(
-                ds_processed["forced"], ds_processed["residual"], TIER1_MODELS, TIER2_MODELS
-            )
-            unc.to_netcdf(scen_dir / f"tas_{scenario}_{EMULATOR_NAME}_{aggregation}_uncertainty.nc")
+        #     # 5. Per-scenario uncertainty decomposition (output 6b)
+        #     unc = uncertainty_decomposition(
+        #         ds_processed["forced"], ds_processed["residual"], TIER1_MODELS, TIER2_MODELS
+        #     )
+        #     unc.to_netcdf(scen_dir / f"tas_{scenario}_{EMULATOR_NAME}_{aggregation}_uncertainty.nc")
 
-            # 6. Cache the multi-model-mean forced response for the cross-scenario step below
-            cache_forced_mean(
-                ds_processed["forced"], scenario, temporal_resolution, label="regional"
-            )
+        #     # 6. Cache the multi-model-mean forced response for the cross-scenario step below
+        #     cache_forced_mean(
+        #         ds_processed["forced"], scenario, temporal_resolution, label="regional"
+        #     )
 
-            print(f"[regional/{temporal_resolution}] {scenario} done")
+        #     print(f"[regional/{temporal_resolution}] {scenario} done")
 
-        # ------------------------------------------------------------------ #
-        #  Cross-scenario uncertainty (output 6a)                             #
-        # ------------------------------------------------------------------ #
-        var_scenario = scenario_uncertainty(SCENARIOS, temporal_resolution, label="regional")
-        var_scenario.to_dataset().to_netcdf(
-            OUTPUT_DIR / f"tas_cross-scenario_{EMULATOR_NAME}_{aggregation}_across-scenario-uncertainty.nc"
-        )
-        print(f"[regional/{temporal_resolution}] cross-scenario uncertainty done")
+        # # ------------------------------------------------------------------ #
+        # #  Cross-scenario uncertainty (output 6a)                             #
+        # # ------------------------------------------------------------------ #
+        # var_scenario = scenario_uncertainty(SCENARIOS, temporal_resolution, label="regional")
+        # var_scenario.to_dataset().to_netcdf(
+        #     OUTPUT_DIR / f"tas_cross-scenario_{EMULATOR_NAME}_{aggregation}_across-scenario-uncertainty.nc"
+        # )
+        # print(f"[regional/{temporal_resolution}] cross-scenario uncertainty done")
